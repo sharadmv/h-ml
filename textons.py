@@ -26,6 +26,6 @@ class TextonExtractor(Job):
         map(lambda x: emit(x[1:]), values)
 
 if __name__ == "__main__":
-    job = TextonExtractor("/user/sharad/textures", "/user/sharad/t-output")
+    job = TextonExtractor("/user/sharad/small-textures", "/user/sharad/small-output")
     job.run()
 

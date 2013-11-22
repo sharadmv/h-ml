@@ -7,7 +7,7 @@ from scipy import ndimage, misc
 def main(args):
     files = glob("%s/%s" % (args.dir, '*.png'))
     files.sort()
-    for f in files[0:10]:
+    for f in files:
         print >>sys.stderr, f
         extract(misc.imread(f))
 

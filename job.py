@@ -20,30 +20,46 @@ class Job:
     def reducer(self, key, values):
         raise NotImplementedError
 
-    def run(self):
-        self.gen()
+    def run(self, **kwargs):
+        self.gen(**kwargs)
 
         cmd = (['hadoop jar', '$HADOOP_HOME/share/hadoop/tools/lib/hadoop-streaming-*.jar',
                   '-mapper ./tmp/mapper.py', '-reducer ./tmp/reducer.py',
                   '-input %s' % self.input, '-output %s' % self.output])
+        for k,v in kwargs.items():
+            if k == 'file':
+                cmd.append('-%s %s' % (k, v))
         print ' '.join(cmd)
         p = sp.Popen(' '.join(cmd), shell=True)
         (stdout, stdin) = p.communicate()
         print stdout
 
-    def gen(self):
+    def gen(self, **kwargs):
         job = inspect.getsource(self.__class__)
         name = self.__class__.__name__
         mapper = open('template/map_template.py').read().format(
             mapper=job,
+            name=name,
             separator=self.separator,
-            name=name
         )
         reducer = open('template/reduce_template.py').read().format(
             reducer=job,
+            name=name,
             separator=self.separator,
-            name=name
         )
+        mapper = mapper.format(
+            separator=self.separator,
+            name=name,
+            **kwargs
+        )
+        reducer = reducer.format(
+            separator=self.separator,
+            name=name,
+            **kwargs
+        )
+        #for k, v in kwargs.items():
+            #mapper = mapper.replace("{%s}" % k, v)
+            #reducer = reducer.replace("{%s}" % k, v)
         if not os.path.exists('tmp/'):
             os.makedirs('tmp/')
         f = open('tmp/mapper.py', 'w')

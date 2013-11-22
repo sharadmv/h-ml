@@ -4,6 +4,7 @@
 from itertools import groupby
 from operator import itemgetter
 import sys
+sys.path.append('.')
 
 class Job:
     pass

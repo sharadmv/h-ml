@@ -1,0 +1,3 @@
+#!/bin/sh
+rm output/*
+hdfs dfs -rm -r /user/sharad/cluster-output*

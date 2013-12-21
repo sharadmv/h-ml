@@ -23,7 +23,7 @@ def main(args):
     np.savetxt(output, centers, fmt='%1.4f', delimiter='\t')
 
 def read_data(filename):
-    return np.loadtxt(filename)
+    return np.loadtxt(filename)[:,2:]
 
 
 def gen_sample(lower_bound, upper_bound):
